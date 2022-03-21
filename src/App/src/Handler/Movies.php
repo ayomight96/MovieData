@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
 ;
 
@@ -24,14 +25,27 @@ class Movies implements RequestHandlerInterface
      */
     private $movieData;
 
+    /**@var RouterInterface */
+    private $router;
+
+    /**@var TemplateRendererInterface */
+    private $template;
+
     /**
      * Movies constructor.
-     *
-     * @param array|\Traversable $movieData
+     * @param $movieData
+     * @param RouterInterface $router
+     * @param TemplateRendererInterface $template
      */
-    public function __construct($movieData)
+    public function __construct(
+        $movieData,
+        RouterInterface $router,
+        TemplateRendererInterface $template
+        )
     {
         $this->movieData = $movieData;
+        $this->router = $router;
+        $this->template = $template;
     }
 
     /**
@@ -41,9 +55,15 @@ class Movies implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        $renderer = (new BasicRenderer())(
-            $this->movieData
-            );
-        return new HtmlResponse($renderer);
+        $data = [
+            'movies' => $this->movieData
+        ];
+
+        $html = $this->template->render(
+            'app::movies',
+            $data
+        );
+  
+        return new HtmlResponse($html);
     }
 }

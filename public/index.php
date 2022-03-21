@@ -21,9 +21,6 @@ require 'vendor/autoload.php';
 (function () {
     /** @var \Psr\Container\ContainerInterface $container */
     $container = require 'config/container.php';
-    $container->setFactory('MovieData', function(){
-        return include 'data/MovieData.php';
-    });
 
     /** @var \Mezzio\Application $app */
     $app = $container->get(\Mezzio\Application::class);

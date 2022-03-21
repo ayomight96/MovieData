@@ -6,6 +6,7 @@ namespace App;
 
 use App\Handler\Movies;
 use App\Handler\MoviesFactory;
+use App\Services\FileAppDataService;
 use Whoops\Handler\Handler;
 
 /**
@@ -38,6 +39,7 @@ class ConfigProvider
         return [
             'invokables' => [
                 Handler\PingHandler::class => Handler\PingHandler::class,
+                'MovieData' => FileAppDataService::class
             ],
             'factories'  => [
                 Handler\HomePageHandler::class => Handler\HomePageHandlerFactory::class,
